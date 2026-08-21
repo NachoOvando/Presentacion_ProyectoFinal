@@ -1,0 +1,702 @@
+/* Sistema de diseño tomado de agente-compras-six.vercel.app
+   (globals.css compilado + next/font). Ver README.md */
+
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url("assets/fonts/plus-jakarta-sans-latin.woff2") format("woff2");
+  unicode-range: u+00??, u+0131, u+0152-0153, u+02bb-02bc, u+02c6, u+02da,
+    u+02dc, u+0304, u+0308, u+0329, u+2000-206f, u+20ac, u+2122, u+2191,
+    u+2193, u+2212, u+2215, u+feff, u+fffd;
+}
+
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url("assets/fonts/plus-jakarta-sans-latin-ext.woff2") format("woff2");
+  unicode-range: u+0100-02ba, u+02bd-02c5, u+02c7-02cc, u+02ce-02d7,
+    u+02dd-02ff, u+0304, u+0308, u+0329, u+1d00-1dbf, u+1e00-1e9f,
+    u+1ef2-1eff, u+2020, u+20a0-20ab, u+20ad-20c0, u+2113, u+2c60-2c7f,
+    u+a720-a7ff;
+}
+
+:root {
+  --color-primary: #0f172a;
+  --color-on-primary: #ffffff;
+  --color-secondary: #334155;
+  --color-accent: #0369a1;
+  --color-background: #f8fafc;
+  --color-foreground: #020617;
+  --color-card: #ffffff;
+  --color-muted: #e8ecf1;
+  --color-muted-foreground: #64748b;
+  --color-border: #e2e8f0;
+  --color-destructive: #dc2626;
+  --color-success: #16a34a;
+  --color-ring: #0f172a;
+
+  --shadow-sm: 0 1px 2px 0 rgb(2 6 23 / 0.05);
+  --shadow-card: 0 1px 3px 0 rgb(2 6 23 / 0.07), 0 1px 2px -1px rgb(2 6 23 / 0.05);
+  --radius-card: 0.75rem;
+  --radius-input: 0.5rem;
+  --content-width: 72rem;
+
+  --grid-line: #e2e8f0;
+  --series-hist: #0369a1;
+  --series-forecast: #7c3aed;
+  --series-band: rgb(124 58 237 / 0.14);
+
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --color-primary: #e2e8f0;
+  --color-on-primary: #0f172a;
+  --color-secondary: #cbd5e1;
+  --color-accent: #38bdf8;
+  --color-background: #0b1220;
+  --color-foreground: #f1f5f9;
+  --color-card: #111a2c;
+  --color-muted: #1e293b;
+  --color-muted-foreground: #94a3b8;
+  --color-border: #1e293b;
+  --color-destructive: #f87171;
+  --color-success: #4ade80;
+  --color-ring: #38bdf8;
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.4);
+  --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.45), 0 1px 2px -1px rgb(0 0 0 / 0.4);
+
+  --grid-line: #1e293b;
+  --series-hist: #38bdf8;
+  --series-forecast: #c084fc;
+  --series-band: rgb(192 132 252 / 0.16);
+
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-size: clamp(15px, 0.55vw + 12px, 19px);
+  line-height: 1.55;
+}
+
+/* ---------- Estructura de slide ---------- */
+
+.slide {
+  display: none;
+  min-height: 100dvh;
+  padding: clamp(1rem, 2.2vw, 2rem) clamp(1.25rem, 4vw, 3.5rem)
+    clamp(3.25rem, 5vw, 4.5rem);
+  flex-direction: column;
+}
+
+.slide.is-active {
+  display: flex;
+}
+
+.slide__inner {
+  width: 100%;
+  max-width: var(--content-width);
+  margin: 0 auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(0.9rem, 1.8vw, 1.75rem);
+  min-height: 0;
+}
+
+.slide--cover .slide__inner {
+  gap: clamp(1.25rem, 2.5vw, 2.5rem);
+}
+
+.kicker {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted-foreground);
+}
+
+.slide h1 {
+  margin: 0;
+  font-size: clamp(1.9rem, 3.6vw, 3.1rem);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+.slide h2 {
+  margin: 0;
+  font-size: clamp(1.5rem, 2.6vw, 2.25rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+.slide h3 {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+
+.lead {
+  margin: 0;
+  max-width: 62ch;
+  font-size: clamp(1rem, 1.25vw, 1.15rem);
+  color: var(--color-muted-foreground);
+  text-wrap: pretty;
+}
+
+.slide p {
+  text-wrap: pretty;
+}
+
+.muted {
+  color: var(--color-muted-foreground);
+}
+
+.strong-num {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* ---------- Barra de secciones ---------- */
+
+.sectionbar {
+  width: 100%;
+  max-width: var(--content-width);
+  margin: 0 auto clamp(0.75rem, 1.6vw, 1.5rem);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 0.6rem;
+}
+
+.slide--cover .sectionbar {
+  display: none;
+}
+
+.sectionbar__item {
+  appearance: none;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--color-muted-foreground);
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 500;
+  padding: 0.3rem 0.7rem;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, background-color 0.2s;
+}
+
+.sectionbar__item:hover {
+  color: var(--color-accent);
+  border-color: var(--color-border);
+}
+
+.sectionbar__item.is-active {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+  background: color-mix(in srgb, var(--color-accent) 8%, transparent);
+  font-weight: 600;
+}
+
+.sectionbar__item:focus-visible,
+.hud button:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
+/* ---------- Cards, pills, tags ---------- */
+
+.card {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: clamp(0.9rem, 1.6vw, 1.35rem);
+  min-width: 0;
+}
+
+.card--flat {
+  box-shadow: none;
+  background: color-mix(in srgb, var(--color-muted) 45%, var(--color-card));
+}
+
+.card__title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.pill {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 0.35rem;
+  border: 1px solid var(--color-border);
+  background: var(--color-card);
+  color: var(--color-secondary);
+  border-radius: 9999px;
+  padding: 0.35rem 0.8rem;
+  font-size: 0.8rem;
+  line-height: 1.3;
+}
+
+.tag {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 0.25rem;
+  border-radius: 9999px;
+  padding: 0.15rem 0.55rem;
+  font-size: 0.68rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.tag--alert {
+  color: var(--color-destructive);
+  background: color-mix(in srgb, var(--color-destructive) 10%, transparent);
+}
+
+.tag--ok {
+  color: var(--color-success);
+  background: color-mix(in srgb, var(--color-success) 10%, transparent);
+}
+
+.tag--accent {
+  color: var(--color-accent);
+  background: color-mix(in srgb, var(--color-accent) 10%, transparent);
+}
+
+.tag svg {
+  flex: none;
+}
+
+/* ---------- Grillas ---------- */
+
+.grid {
+  display: grid;
+  gap: clamp(0.7rem, 1.3vw, 1.1rem);
+  min-width: 0;
+}
+
+.grid--2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.grid--3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.grid--4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.grid--split {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  align-items: center;
+}
+
+@media (max-width: 900px) {
+  .grid--2,
+  .grid--3,
+  .grid--4,
+  .grid--split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.6rem, 1.1vw, 1rem);
+  min-width: 0;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+/* ---------- Métricas ---------- */
+
+.metric {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.metric__value {
+  font-size: clamp(1.5rem, 2.4vw, 2.1rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  color: var(--color-foreground);
+}
+
+.metric__value--accent {
+  color: var(--color-accent);
+}
+
+.metric__label {
+  font-size: 0.78rem;
+  color: var(--color-muted-foreground);
+  line-height: 1.35;
+}
+
+/* ---------- Tablas ---------- */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 0.5rem 0.6rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+thead th {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-muted-foreground);
+}
+
+tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+td.num,
+th.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+tr.is-total td {
+  font-weight: 700;
+  border-top: 1px solid var(--color-border);
+}
+
+/* ---------- Listas ---------- */
+
+.bullets {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.92rem;
+}
+
+/* Flujo normal a propósito: con grid o flex, cada <b> o <i> del contenido
+   se vuelve un ítem propio y el texto se parte palabra por palabra. */
+.bullets li {
+  position: relative;
+  padding-left: 1.05rem;
+}
+
+.bullets li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 0.35rem;
+  height: 0.35rem;
+  border-radius: 9999px;
+  background: var(--color-accent);
+}
+
+/* ---------- Flujo problema -> solución ---------- */
+
+.flow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: clamp(0.5rem, 1.2vw, 1rem);
+  align-items: center;
+}
+
+.flow__arrow {
+  color: var(--color-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 900px) {
+  .flow {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .flow__arrow svg {
+    transform: rotate(90deg);
+  }
+}
+
+/* ---------- Assets pendientes ---------- */
+
+.asset-pendiente {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  text-align: center;
+  min-height: 8.5rem;
+  padding: 1rem;
+  border: 1px dashed color-mix(in srgb, var(--color-muted-foreground) 55%, transparent);
+  border-radius: var(--radius-card);
+  color: var(--color-muted-foreground);
+  font-size: 0.75rem;
+  line-height: 1.35;
+}
+
+.asset-pendiente--logo {
+  min-height: 5.5rem;
+  width: min(15rem, 100%);
+}
+
+.asset-pendiente b {
+  color: var(--color-secondary);
+  font-weight: 600;
+}
+
+.nota-pendiente {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  color: var(--color-muted-foreground);
+  border: 1px dashed color-mix(in srgb, var(--color-muted-foreground) 45%, transparent);
+  border-radius: 9999px;
+  padding: 0.25rem 0.7rem;
+}
+
+/* ---------- Gráficos ---------- */
+
+.chart {
+  width: 100%;
+}
+
+.chart svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
+
+.chart__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  font-size: 0.75rem;
+  color: var(--color-muted-foreground);
+  margin-top: 0.5rem;
+}
+
+.chart__legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.swatch {
+  width: 0.7rem;
+  height: 0.2rem;
+  border-radius: 9999px;
+  display: inline-block;
+}
+
+/* ---------- QR ---------- */
+
+.qr {
+  background: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: clamp(0.75rem, 1.4vw, 1.1rem);
+  box-shadow: var(--shadow-card);
+  width: clamp(11rem, 22vw, 17rem);
+}
+
+.qr svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.qr-url {
+  font-size: 0.85rem;
+  color: var(--color-accent);
+  word-break: break-all;
+}
+
+/* ---------- Chat de ejemplo (mimetiza la app) ---------- */
+
+.chat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.chat__msg {
+  max-width: 85%;
+  border-radius: 1rem;
+  padding: 0.5rem 0.9rem;
+  font-size: 0.85rem;
+}
+
+.chat__msg--user {
+  align-self: flex-end;
+  border-bottom-right-radius: 0.125rem;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.chat__msg--bot {
+  align-self: flex-start;
+  border-bottom-left-radius: 0.125rem;
+  background: color-mix(in srgb, var(--color-muted) 60%, var(--color-card));
+  border: 1px solid var(--color-border);
+  color: var(--color-foreground);
+}
+
+/* ---------- HUD ---------- */
+
+.hud {
+  position: fixed;
+  right: clamp(0.75rem, 2vw, 1.5rem);
+  bottom: clamp(0.75rem, 1.6vw, 1.25rem);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--color-muted-foreground);
+  z-index: 10;
+}
+
+.hud button {
+  appearance: none;
+  border: 1px solid var(--color-border);
+  background: var(--color-card);
+  color: var(--color-secondary);
+  border-radius: 9999px;
+  width: 2rem;
+  height: 2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.hud button:hover {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.counter {
+  font-variant-numeric: tabular-nums;
+  padding: 0 0.25rem;
+}
+
+.progress {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  width: 100%;
+  background: var(--color-border);
+  z-index: 10;
+}
+
+.progress__bar {
+  height: 100%;
+  width: 0;
+  background: var(--color-accent);
+  transition: width 0.25s ease;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+}
+
+/* ---------- Impresión (respaldo en PDF) ---------- */
+
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 12mm;
+  }
+
+  html,
+  body {
+    background: #ffffff;
+    font-size: 11px;
+  }
+
+  .hud,
+  .progress {
+    display: none !important;
+  }
+
+  .slide {
+    display: flex !important;
+    min-height: 0;
+    height: auto;
+    padding: 0;
+    break-after: page;
+    page-break-after: always;
+    break-inside: avoid;
+  }
+
+  .slide__inner {
+    justify-content: flex-start;
+  }
+
+  .slide:last-of-type {
+    break-after: auto;
+    page-break-after: auto;
+  }
+
+  .card {
+    box-shadow: none;
+  }
+}

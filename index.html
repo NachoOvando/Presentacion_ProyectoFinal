@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ML/IA en el Supply Chain</title>
+<meta name="description" content="Defensa del Proyecto Final 065-25: aplicación de ML/IA al Supply Chain de Maincal S.A. (caso Cronos-N04).">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <g id="i-arrow" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h13"/><path d="M13 6l6 6-6 6"/></g>
+    <g id="i-alert" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.8 2.7 20h18.6z"/><path d="M12 10v4.2"/><path d="M12 17.2h.01"/></g>
+    <g id="i-check" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5l5 5 10-11"/></g>
+    <g id="i-sun" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2M12 19.4v2M2.6 12h2M19.4 12h2M5.4 5.4l1.4 1.4M17.2 17.2l1.4 1.4M18.6 5.4l-1.4 1.4M6.8 17.2l-1.4 1.4"/></g>
+    <g id="i-moon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.6A8.8 8.8 0 0 1 9.4 3.5a8.8 8.8 0 1 0 11.1 11.1z"/></g>
+    <g id="i-expand" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5V4h5.5M20 9.5V4h-5.5M4 14.5V20h5.5M20 14.5V20h-5.5"/></g>
+    <g id="i-left" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 5l-7 7 7 7"/></g>
+    <g id="i-right" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 5l7 7-7 7"/></g>
+    <g id="i-camera" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5h3.5L8 6h8l1.5 2.5H21v11H3z"/><circle cx="12" cy="13.5" r="3.4"/></g>
+    <g id="i-chat" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12.2a8.3 8.3 0 0 1-11.9 7.5L3.5 21l1.3-5.1A8.3 8.3 0 1 1 20.5 12.2z"/></g>
+    <g id="i-box" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4.4v9.2L12 21l-8-4.4V7.4z"/><path d="M4 7.4l8 4.4 8-4.4M12 11.8V21"/></g>
+    <g id="i-chart" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4v16h16"/><path d="M7.5 15l3.5-4.5 3 2.5 4.5-6"/></g>
+  </defs>
+</svg>
+
+<main id="deck">
+
+<!-- ====================== 1. Portada ====================== -->
+<section class="slide slide--cover is-active" id="slide-1" data-titulo="Portada">
+  <div class="slide__inner">
+    <p class="kicker">Proyecto Final de Carrera 065-25 &middot; FCEIA &middot; UNR</p>
+    <h1>Implementación de ML/IA para la Mejora Integral del Supply Chain en la Industria</h1>
+    <p class="lead">Caso de estudio: Maincal S.A. &mdash; línea Cronos-N04.</p>
+    <div class="row" style="gap:0.6rem">
+      <span class="pill">Jerónimo Guaita</span>
+      <span class="pill">Ignacio Ovando</span>
+    </div>
+    <div class="asset-pendiente asset-pendiente--logo">
+      <b>Logo FCEIA &middot; UNR</b>
+      <span>Asset pendiente: reemplazar por el logo institucional en alta resolución (ver README).</span>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== 2. Motivación ====================== -->
+<section class="slide slide--cover" id="slide-2" data-titulo="Motivación y agradecimiento">
+  <div class="slide__inner">
+    <p class="kicker">Por qué este proyecto</p>
+    <h2>Motivación</h2>
+    <div class="grid grid--3">
+      <div class="card stack">
+        <h3>Vínculo profesional</h3>
+        <p class="metric__label">Nuestro trabajo diario en planificación, ventas y automatización de datos nos puso frente a los problemas que analiza este proyecto.</p>
+      </div>
+      <div class="card stack">
+        <h3>Adopción incipiente</h3>
+        <p class="metric__label">La aplicación de ML/IA a la gestión de la cadena de suministro industrial todavía es incipiente en la industria nacional.</p>
+      </div>
+      <div class="card stack">
+        <h3>Big Data subutilizado</h3>
+        <p class="metric__label">Las empresas ya generan el dato; la oportunidad estratégica está en convertirlo en decisiones.</p>
+      </div>
+    </div>
+    <h2 style="margin-top:0.5rem">Agradecimientos</h2>
+    <!-- PENDIENTE (autores): reemplazar este bloque por el texto de agradecimiento
+         al director del proyecto, a Maincal S.A. y a la cátedra. -->
+    <div class="asset-pendiente" style="min-height:6rem">
+      <b>Texto de agradecimiento</b>
+      <span>Pendiente de redacción por los autores: director del proyecto, Maincal S.A. y cátedra.</span>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== 3. La empresa ====================== -->
+<section class="slide" id="slide-3" data-seccion="contexto" data-titulo="La empresa y su estructura">
+  <div class="slide__inner">
+    <p class="kicker">Contexto actual</p>
+    <h2>Maincal S.A.</h2>
+    <div class="grid grid--4">
+      <div class="card metric"><span class="metric__value">+60</span><span class="metric__label">años en el mercado</span></div>
+      <div class="card metric"><span class="metric__value">480</span><span class="metric__label">colaboradores</span></div>
+      <div class="card metric"><span class="metric__value">12.446</span><span class="metric__label">m² de planta, Parque Industrial Metropolitano (Pérez)</span></div>
+      <div class="card metric"><span class="metric__value">280 / 3.360</span><span class="metric__label">modelos / SKUs, 100% de producción nacional</span></div>
+    </div>
+    <div class="grid grid--split">
+      <div class="card stack">
+        <h3>El foco del proyecto: la Gerencia de Supply Chain</h3>
+        <p class="metric__label">Coordina la disponibilidad de recursos, la gestión de inventario y el abastecimiento para asegurar el cumplimiento de los planes productivos y los niveles de servicio al cliente ante variaciones de demanda (Chopra y Meindl, 2016).</p>
+      </div>
+      <div class="stack">
+        <p class="kicker">Tres áreas</p>
+        <div class="grid grid--3">
+          <div class="card metric"><span class="metric__value" style="font-size:1.05rem">Planificación</span><span class="metric__label">Qué y cuánto producir</span></div>
+          <div class="card metric"><span class="metric__value" style="font-size:1.05rem">Logística</span><span class="metric__label">Qué hay y dónde está</span></div>
+          <div class="card metric"><span class="metric__value" style="font-size:1.05rem">Compras</span><span class="metric__label">Qué reponer y cuándo</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== 4. Diagnóstico ====================== -->
+<section class="slide" id="slide-4" data-seccion="problema" data-titulo="Diagnóstico y encuadre con IA/ML">
+  <div class="slide__inner">
+    <p class="kicker">Problema y solución</p>
+    <h2>Tres problemas encadenados, no tres problemas sueltos</h2>
+    <div class="grid grid--3">
+      <div class="card stack">
+        <div class="card__title"><span class="tag tag--alert"><svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-alert"/></svg>Planificación</span></div>
+        <h3>Falta de precisión en el pronóstico de ventas</h3>
+        <p class="metric__label">Sin una proyección confiable de demanda, todo el plan de materiales aguas abajo arranca torcido.</p>
+      </div>
+      <div class="card stack">
+        <div class="card__title"><span class="tag tag--alert"><svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-alert"/></svg>Logística</span></div>
+        <h3>Diferencias entre stock físico y stock del sistema</h3>
+        <p class="metric__label">El ERP dice una cosa y el depósito muestra otra; la diferencia se detecta tarde, por conteo manual.</p>
+      </div>
+      <div class="card stack">
+        <div class="card__title"><span class="tag tag--alert"><svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-alert"/></svg>Compras</span></div>
+        <h3>Ineficiencia en la gestión de compras</h3>
+        <p class="metric__label">Consecuencia directa de las dos anteriores: se compra sobre datos que no son confiables.</p>
+      </div>
+    </div>
+    <div class="card card--flat stack">
+      <h3>Por qué ML/IA aplica acá</h3>
+      <p class="metric__label">La <b>Inteligencia Artificial</b> es el campo que busca que un sistema resuelva tareas que requerirían inteligencia humana; el <b>Machine Learning</b> es el subconjunto en el que el sistema aprende patrones a partir de datos históricos en lugar de seguir reglas escritas a mano. La cadena de suministro es un terreno natural para esto: genera series temporales de demanda, registros de inventario y fichas de proveedores &mdash; es decir, datos históricos, repetitivos y ya digitalizados sobre los que decidir.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== 5. Mapeo problema -> solución ====================== -->
+<section class="slide" id="slide-5" data-seccion="problema" data-titulo="Mapeo problema a solución">
+  <div class="slide__inner">
+    <p class="kicker">Problema y solución</p>
+    <h2>Una técnica para cada problema</h2>
+    <div class="stack">
+      <div class="flow">
+        <div class="card stack">
+          <span class="tag tag--alert"><svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-alert"/></svg>Planificación</span>
+          <h3>Pronóstico de demanda impreciso</h3>
+        </div>
+        <div class="flow__arrow"><svg width="34" height="34" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-arrow"/></svg></div>
+        <div class="card stack">
+          <span class="tag tag--accent"><svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chart"/></svg>Solución</span>
+          <h3>Prophet + K-Means ponderado por AHP</h3>
+          <p class="metric__label">Proyectar la demanda y, sobre ella, clasificar qué insumos son realmente críticos.</p>
+        </div>
+      </div>
+      <div class="flow">
+        <div class="card stack">
+          <span class="tag tag--alert"><svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-alert"/></svg>Logística</span>
+          <h3>Stock físico distinto del stock del sistema</h3>
+        </div>
+        <div class="flow__arrow"><svg width="34" height="34" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-arrow"/></svg></div>
+        <div class="card stack">
+          <span class="tag tag--accent"><svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-camera"/></svg>Solución (conceptual)</span>
+          <h3>Visión artificial CNN-YOLO</h3>
+          <p class="metric__label">Monitoreo continuo del depósito en lugar de conteo manual periódico.</p>
+        </div>
+      </div>
+      <div class="flow">
+        <div class="card stack">
+          <span class="tag tag--alert"><svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-alert"/></svg>Compras</span>
+          <h3>Información dispersa, decisiones lentas</h3>
+        </div>
+        <div class="flow__arrow"><svg width="34" height="34" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-arrow"/></svg></div>
+        <div class="card stack">
+          <span class="tag tag--accent"><svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chat"/></svg>Solución</span>
+          <h3>Agente conversacional RAG (GPT-4o-mini)</h3>
+          <p class="metric__label">Consultar proveedores, BOM y stock en un solo lugar y en lenguaje natural.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== 6. Pareto ====================== -->
+<section class="slide" id="slide-6" data-seccion="planificacion" data-titulo="Selección de artículos (Pareto)">
+  <div class="slide__inner">
+    <p class="kicker">Planificación</p>
+    <h2>Sobre qué artículos trabajar</h2>
+    <p class="lead">Un análisis de Pareto sobre las ventas 2023-2025 concentra el esfuerzo en los tres artículos de mayor volumen.</p>
+    <div class="grid grid--split">
+      <div class="card">
+        <div class="chart" id="chart-pareto"></div>
+      </div>
+      <div class="stack">
+        <div class="card metric">
+          <span class="metric__value metric__value--accent">53,7%</span>
+          <span class="metric__label">de las ventas 2023-2025 se concentran en 3 de los 280 modelos del catálogo.</span>
+        </div>
+        <div class="card card--flat">
+          <p class="metric__label" style="margin:0">El <b>Cronos-N04</b> concentra por sí solo más de un tercio del volumen: es el artículo sobre el que se desarrolla el resto del proyecto.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== 7. Prophet ====================== -->
+<section class="slide" id="slide-7" data-seccion="planificacion" data-titulo="Comportamiento histórico y pronóstico">
+  <div class="slide__inner">
+    <p class="kicker">Planificación</p>
+    <div class="row" style="justify-content:space-between">
+      <h2>Del histórico al pronóstico con Prophet</h2>
+      <span class="nota-pendiente" data-si-ilustrativo>Datos ilustrativos: reemplazar por la salida real del notebook</span>
+    </div>
+    <div class="grid grid--2">
+      <div class="card stack">
+        <h3>Ventas mensuales, enero 2023 &ndash; diciembre 2025</h3>
+        <div class="chart" id="chart-historico"></div>
+        <p class="metric__label">Comportamiento estable y estacional, sin tendencia alcista marcada.</p>
+      </div>
+      <div class="card stack">
+        <h3>Pronóstico a 12 meses, enero 2026 &ndash; enero 2027</h3>
+        <div class="chart" id="chart-pronostico"></div>
+        <p class="metric__label">Prophet (Meta) descompone la serie en tendencia y estacionalidad y proyecta el período siguiente con su intervalo de confianza.</p>
+      </div>
+    </div>
+    <div class="card card--flat row" style="gap:0.9rem">
+      <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" style="color:var(--color-accent)"><use href="#i-box"/></svg>
+      <p class="metric__label" style="flex:1;min-width:14rem">El pronóstico cruzado con la <b>BOM</b> (lista de materiales) traduce pares proyectados en insumos necesarios para fabricarlos. Esa proyección de insumos es la entrada del paso siguiente.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== 8. K-Means + AHP ====================== -->
+<section class="slide" id="slide-8" data-seccion="planificacion" data-titulo="Clasificación K-Means e insumos críticos">
+  <div class="slide__inner">
+    <p class="kicker">Planificación</p>
+    <h2>Qué insumos son realmente críticos</h2>
+    <div class="grid grid--split">
+      <div class="card stack">
+        <h3>Tres variables, normalizadas 0-100 y ponderadas por AHP</h3>
+        <div class="chart" id="chart-ahp"></div>
+        <p class="metric__label">Pesos validados por encuesta (n = 10, CR aprox. 0). El <b>alcance productivo</b> &mdash;cuántos modelos dependen del insumo&mdash; domina la decisión.</p>
+      </div>
+      <div class="card stack">
+        <h3>Del universo a lo crítico</h3>
+        <div class="chart" id="chart-embudo"></div>
+        <p class="metric__label">92 SKUs se agrupan en 27 familias de compra; K-Means las separa en tres clusters (Crítico, Importante, Secundario).</p>
+      </div>
+    </div>
+    <p class="kicker">Los tres insumos críticos seleccionados</p>
+    <div class="grid grid--3">
+      <!-- PENDIENTE (autores): reemplazar cada .asset-pendiente por
+           <img src="assets/insumos/....jpg" alt="..."> cuando lleguen las fotos. -->
+      <div class="asset-pendiente"><b>Conjunto Sistema PU</b><span>Foto pendiente: solicitar a los autores.</span></div>
+      <div class="asset-pendiente"><b>Puntera de Acero 59 Normal</b><span>Foto pendiente: solicitar a los autores.</span></div>
+      <div class="asset-pendiente"><b>Cajas de Empaque</b><span>Foto pendiente: solicitar a los autores.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== 9. Políticas de inventario ====================== -->
+<section class="slide" id="slide-9" data-seccion="planificacion" data-titulo="Políticas de inventario">
+  <div class="slide__inner">
+    <p class="kicker">Planificación</p>
+    <h2>Una política de inventario por insumo</h2>
+    <p class="lead">La criticidad no se traduce en una única regla: cada insumo se repone según cómo se consume y cómo se abastece.</p>
+    <div class="grid grid--2">
+      <div class="card stack">
+        <span class="tag tag--accent">Revisión continua</span>
+        <h3>Conjunto Sistema PU</h3>
+        <p class="metric__label">Proveedor único y consumo continuo. El pedido se dispara al alcanzar el <b>Punto de Pedido (ROP)</b>, sin esperar a una fecha de revisión.</p>
+      </div>
+      <div class="card stack">
+        <span class="tag tag--accent">Revisión periódica mensual</span>
+        <h3>Puntera de Acero y Caja de Empaque</h3>
+        <p class="metric__label">Insumos <i>make-to-order</i>. Se revisan una vez por mes y se repone hasta el <b>Nivel Objetivo</b>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== 10. YOLO ====================== -->
+<section class="slide" id="slide-10" data-seccion="logistica" data-titulo="Control visual de stock con YOLO">
+  <div class="slide__inner">
+    <p class="kicker">Logística</p>
+    <h2>De contar a mano a monitorear de forma continua</h2>
+    <div class="grid grid--split">
+      <div class="card stack">
+        <span class="tag tag--alert"><svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-alert"/></svg>Hoy</span>
+        <h3>Conteo manual periódico</h3>
+        <p class="metric__label">La diferencia entre stock físico y stock del sistema se detecta recién cuando alguien cuenta: es propenso a error y la detección llega tarde.</p>
+      </div>
+      <div class="card stack">
+        <span class="tag tag--accent"><svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-camera"/></svg>Propuesta</span>
+        <h3>Visión artificial CNN-YOLO sobre los tres insumos críticos</h3>
+        <p class="metric__label">Se aplica exactamente sobre los insumos que Planificación identificó como críticos, no sobre todo el depósito.</p>
+      </div>
+    </div>
+    <div class="chart" id="chart-yolo"></div>
+    <p class="metric__label" style="margin:0">La alerta no afirma que haya un error: es una <b>observación a revisar</b> cuando la detección supera el umbral de confianza. El aporte es el cambio de régimen: de un control reactivo y puntual a un monitoreo continuo con trazabilidad.</p>
+  </div>
+</section>
+
+<!-- ====================== 11. Presupuesto ====================== -->
+<section class="slide" id="slide-11" data-seccion="logistica" data-titulo="Presupuesto de implementación">
+  <div class="slide__inner">
+    <p class="kicker">Logística</p>
+    <h2>Cuánto cuesta implementarlo</h2>
+    <div class="grid grid--split">
+      <div class="card">
+        <table>
+          <thead><tr><th>Ítem</th><th class="num">Monto</th></tr></thead>
+          <tbody>
+            <tr><td>Licencia Ultralytics Pro</td><td class="num">348 USD/año</td></tr>
+            <tr><td>Hardware: 6 cámaras + NVR <span class="muted">(inversión inicial)</span></td><td class="num">1.230 USD</td></tr>
+            <tr><td>Mantenimiento <span class="muted">(10-15% del hardware)</span></td><td class="num">130 &ndash; 190 USD/año</td></tr>
+            <tr><td>Capacitación</td><td class="num">0 USD</td></tr>
+            <tr class="is-total"><td>Total anual estimado</td><td class="num">1.708 &ndash; 1.768 USD</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="stack">
+        <div class="card metric">
+          <span class="metric__value metric__value--accent">1.708 &ndash; 1.768 USD</span>
+          <span class="metric__label">Total anual estimado de la solución de visión artificial.</span>
+        </div>
+        <div class="card card--flat">
+          <p class="metric__label" style="margin:0">La capacitación no suma costo porque el sistema no cambia la operación del depósito: corre en paralelo y sólo emite alertas.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== 12. El agente ====================== -->
+<section class="slide" id="slide-12" data-seccion="compras" data-titulo="El agente conversacional">
+  <div class="slide__inner">
+    <p class="kicker">Compras</p>
+    <h2>Un agente que responde sólo con los datos de la empresa</h2>
+    <div class="grid grid--split">
+      <div class="stack">
+        <div class="card stack">
+          <span class="tag tag--alert"><svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-alert"/></svg>El problema</span>
+          <p class="metric__label" style="margin:0">La información vive dispersa entre fichas de proveedores, BOM y stock. Reunirla para decidir una compra es lento, y por eso la decisión termina siendo reactiva.</p>
+        </div>
+        <div class="card stack">
+          <span class="tag tag--accent"><svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chat"/></svg>La solución</span>
+          <h3>Arquitectura RAG (Retrieval-Augmented Generation)</h3>
+          <p class="metric__label">Ante una pregunta, el sistema primero <b>recupera</b> los fragmentos relevantes de los documentos de la empresa y recién después <b>genera</b> la respuesta a partir de ellos.</p>
+        </div>
+        <div class="card card--flat stack">
+          <h3>La diferencia con un chatbot convencional</h3>
+          <p class="metric__label" style="margin:0">El agente responde dentro de un <b>cerco de información</b> cerrado. Si el dato no está en el cerco, lo dice: no lo inventa.</p>
+        </div>
+      </div>
+      <div class="card stack">
+        <h3>Fuera del cerco</h3>
+        <div class="chat">
+          <div class="chat__msg chat__msg--user">¿Quién ganó el Mundial 2026?</div>
+          <div class="chat__msg chat__msg--bot">No tengo esa información en los datos de la empresa. Puedo ayudarte con proveedores, BOM y stock de los insumos críticos del Cronos-N04.</div>
+        </div>
+        <p class="metric__label" style="margin:0">Esta pregunta está precargada en la app justamente para mostrar el límite en vivo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== 13. Construcción ====================== -->
+<section class="slide" id="slide-13" data-seccion="compras" data-titulo="Qué se tuvo en cuenta para construirlo">
+  <div class="slide__inner">
+    <p class="kicker">Compras</p>
+    <h2>Qué se tuvo en cuenta para construirlo</h2>
+    <div class="grid grid--3">
+      <div class="card stack">
+        <span class="tag tag--accent">1. Cerco de información</span>
+        <h3>Qué datos puede ver</h3>
+        <ul class="bullets">
+          <li>Fichas de proveedores</li>
+          <li>BOM exportada del ERP (Excel)</li>
+          <li>Stock actual de los tres insumos críticos</li>
+        </ul>
+        <p class="metric__label">Cada fuente se actualiza con su propia frecuencia: el stock a diario, los proveedores mensualmente y la BOM ante cambios de ingeniería.</p>
+      </div>
+      <div class="card stack">
+        <span class="tag tag--accent">2. System prompt</span>
+        <h3>Cómo se tiene que comportar</h3>
+        <ul class="bullets">
+          <li>Responde únicamente con datos del contexto</li>
+          <li>No inventa cantidades</li>
+          <li>Prioriza por stock contra mínimo</li>
+          <li>Desempata por lead time y por proveedor único</li>
+        </ul>
+      </div>
+      <div class="card stack">
+        <span class="tag tag--accent">3. Modelo</span>
+        <h3>Con qué está hecho</h3>
+        <ul class="bullets">
+          <li><b>GPT-4o-mini</b> para generar las respuestas</li>
+          <li><b>text-embedding-3-small</b> para los embeddings</li>
+          <li>Búsqueda por similitud coseno (scikit-learn)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== 14. Demo + QR ====================== -->
+<section class="slide" id="slide-14" data-seccion="compras" data-titulo="Demo en vivo">
+  <div class="slide__inner">
+    <p class="kicker">Compras</p>
+    <h2>Probalo ahora</h2>
+    <div class="grid grid--split">
+      <div class="row" style="gap:clamp(1rem,2vw,2rem);align-items:center">
+        <div class="qr">
+          <svg viewBox="0 0 330 330" role="img" aria-label="Código QR hacia agente-compras-six.vercel.app"><g transform="scale(10)"><path fill="#fff" d="M0 0h33v33h-33z"/><path stroke="#0f172a" d="M2 2.5h7m3 0h1m1 0h1m1 0h1m1 0h4m2 0h7m-29 1h1m5 0h1m3 0h1m1 0h1m2 0h1m4 0h1m1 0h1m5 0h1m-29 1h1m1 0h3m1 0h1m1 0h5m2 0h1m3 0h1m2 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m1 0h3m1 0h1m2 0h3m2 0h1m1 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m1 0h3m5 0h1m2 0h2m1 0h1m1 0h3m1 0h1m-29 1h1m5 0h1m1 0h1m2 0h2m2 0h4m1 0h1m1 0h1m5 0h1m-29 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-21 1h4m3 0h1m-16 1h1m1 0h5m5 0h1m2 0h1m1 0h1m4 0h5m-27 1h2m2 0h2m2 0h2m3 0h1m2 0h5m1 0h3m3 0h1m-29 1h5m1 0h3m2 0h5m2 0h1m-16 1h2m4 0h1m2 0h2m2 0h1m2 0h1m1 0h1m1 0h1m1 0h1m1 0h1m-28 1h1m1 0h1m1 0h9m1 0h1m2 0h1m2 0h1m4 0h2m-24 1h2m3 0h3m1 0h1m4 0h1m1 0h6m3 0h1m-23 1h1m8 0h1m2 0h1m4 0h4m-25 1h2m7 0h1m2 0h3m1 0h1m4 0h2m2 0h1m-28 1h1m3 0h6m2 0h1m4 0h2m1 0h2m3 0h2m-27 1h1m3 0h2m1 0h1m1 0h1m1 0h1m1 0h2m1 0h9m1 0h1m1 0h1m-29 1h1m2 0h6m4 0h5m2 0h1m1 0h2m2 0h1m-27 1h1m2 0h1m1 0h1m2 0h1m2 0h1m1 0h1m1 0h2m1 0h1m1 0h1m2 0h2m2 0h1m-28 1h1m1 0h1m1 0h1m1 0h2m1 0h1m1 0h2m1 0h2m1 0h1m1 0h6m1 0h3m-21 1h1m1 0h1m1 0h1m3 0h1m3 0h1m3 0h5m-29 1h7m2 0h4m2 0h3m1 0h2m1 0h1m1 0h3m-27 1h1m5 0h1m1 0h1m2 0h1m2 0h1m3 0h3m3 0h1m-25 1h1m1 0h3m1 0h1m1 0h2m1 0h1m3 0h1m1 0h1m2 0h5m1 0h1m-27 1h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h3m1 0h1m1 0h3m4 0h4m-29 1h1m1 0h3m1 0h1m1 0h3m2 0h1m1 0h1m3 0h9m-28 1h1m5 0h1m4 0h1m1 0h1m6 0h2m1 0h3m1 0h1m-28 1h7m1 0h3m4 0h3m1 0h1m2 0h1m1 0h1m1 0h1"/></g></svg>
+        </div>
+        <div class="stack" style="flex:1;min-width:12rem">
+          <h3>Escaneá y probá el agente en vivo</h3>
+          <p class="metric__label">Todos pueden entrar desde su celular mientras hacemos una consulta guiada.</p>
+          <p class="qr-url">agente-compras-six.vercel.app</p>
+        </div>
+      </div>
+      <div class="stack">
+        <p class="kicker">Consultas que vamos a mostrar</p>
+        <div class="row">
+          <span class="pill">¿Qué insumo debería priorizar esta semana?</span>
+          <span class="pill">Con una orden de 1000 pares del Cronos-N04, ¿tenemos stock suficiente?</span>
+          <span class="pill">¿Cuál es el lead time y el proveedor del Conjunto Sistema PU?</span>
+        </div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Costo de la solución</th><th class="num">USD</th></tr></thead>
+            <tbody>
+              <tr><td>Por consulta</td><td class="num">aprox. 0,0005</td></tr>
+              <tr><td>Anual (operación)</td><td class="num">aprox. 6,60</td></tr>
+              <tr class="is-total"><td>Total primer año</td><td class="num">aprox. 6,60 &ndash; 6,75</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== 15. Mapa conceptual ====================== -->
+<section class="slide" id="slide-15" data-seccion="conclusion" data-titulo="Mapa conceptual: el flujo pull">
+  <div class="slide__inner">
+    <p class="kicker">Conclusión</p>
+    <h2>No son tres soluciones aisladas: es un sistema encadenado</h2>
+    <div class="chart" id="chart-mapa"></div>
+    <p class="lead" style="max-width:none">Cada flecha es una dependencia real de datos, no una relación temática: lo que proyecta Planificación define qué insumos monitorea Logística, y el stock confiable que devuelve Logística alimenta el contexto con el que Compras decide. El resultado cubre la cadena completa, de la demanda al proveedor.</p>
+  </div>
+</section>
+
+</main>
+
+<div class="hud">
+  <button type="button" id="btn-prev" title="Slide anterior" aria-label="Slide anterior"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-left"/></svg></button>
+  <span class="counter" id="contador" aria-live="polite">1 / 15</span>
+  <button type="button" id="btn-next" title="Slide siguiente" aria-label="Slide siguiente"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-right"/></svg></button>
+  <button type="button" id="btn-tema" title="Cambiar tema (t)" aria-label="Cambiar tema"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-moon" id="icono-tema"/></svg></button>
+  <button type="button" id="btn-full" title="Pantalla completa (f)" aria-label="Pantalla completa"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-expand"/></svg></button>
+</div>
+
+<div class="progress"><div class="progress__bar" id="progreso"></div></div>
+
+<script src="data/series.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
