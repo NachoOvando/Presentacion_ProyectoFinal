@@ -203,15 +203,18 @@
     return ticks;
   }
 
-  /* Serie temporal mensual. Eje Y con base no nula y ticks rotulados. */
+  /* Serie temporal mensual, multi-serie. Eje Y con base no nula, ticks
+     rotulados y una sola serie "protagonista" con marcador y valor
+     rotulados en la punta; el resto queda de contexto (más fina, sin
+     marcador) para que no compitan visualmente con Cronos-N04. */
   function lineaTemporal(cfg) {
-    var W = 620, H = 250;
+    var W = 620, H = 260;
     var ml = 52, mr = 16, mt = 14, mb = 30;
     var pw = W - ml - mr, ph = H - mt - mb;
-    var n = cfg.valores.length;
+    var n = cfg.series[0].valores.length;
 
-    var todos = cfg.valores.slice();
-    if (cfg.banda) cfg.banda.forEach(function (b) { todos.push(b[0], b[1]); });
+    var todos = [];
+    cfg.series.forEach(function (s) { todos = todos.concat(s.valores); });
     var lo = cfg.dominio ? cfg.dominio[0] : Math.min.apply(null, todos);
     var hi = cfg.dominio ? cfg.dominio[1] : Math.max.apply(null, todos);
     var paso = 1000;
@@ -222,36 +225,46 @@
     var x = function (i) { return ml + (n === 1 ? pw / 2 : (pw * i) / (n - 1)); };
     var y = function (v) { return mt + ph - ((v - yMin) / (yMax - yMin)) * ph; };
 
-    var s = '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="' + cfg.alt + '">';
+    var svg = '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="' + cfg.alt + '">';
 
     ejesY(yMin, yMax, paso).forEach(function (v) {
-      s += '<line x1="' + ml + '" x2="' + (W - mr) + '" y1="' + y(v) + '" y2="' + y(v) + '" style="' + ESTILO.grid + '"/>';
-      s += '<text x="' + (ml - 8) + '" y="' + (y(v) + 4) + '" text-anchor="end" style="' + ESTILO.ejeTexto + '">' + nf(v) + "</text>";
+      svg += '<line x1="' + ml + '" x2="' + (W - mr) + '" y1="' + y(v) + '" y2="' + y(v) + '" style="' + ESTILO.grid + '"/>';
+      svg += '<text x="' + (ml - 8) + '" y="' + (y(v) + 4) + '" text-anchor="end" style="' + ESTILO.ejeTexto + '">' + nf(v) + "</text>";
     });
 
     cfg.marcasX.forEach(function (m) {
-      s += '<text x="' + x(m.i) + '" y="' + (H - 10) + '" text-anchor="middle" style="' + ESTILO.ejeTexto + '">' + m.texto + "</text>";
+      svg += '<text x="' + x(m.i) + '" y="' + (H - 10) + '" text-anchor="middle" style="' + ESTILO.ejeTexto + '">' + m.texto + "</text>";
     });
 
-    if (cfg.banda) {
-      var sup = cfg.banda.map(function (b, i) { return (i ? "L" : "M") + x(i) + " " + y(b[1]); }).join(" ");
-      var inf = cfg.banda.map(function (b, i) { return "L" + x(n - 1 - i) + " " + y(cfg.banda[n - 1 - i][0]); }).join(" ");
-      s += '<path d="' + sup + " " + inf + ' Z" style="fill:' + ESTILO.marca + ';opacity:0.12"/>';
+    /* series de contexto primero, para que la protagonista quede arriba */
+    var contexto = cfg.series.filter(function (s) { return !s.protagonista; });
+    var hero = cfg.series.filter(function (s) { return s.protagonista; })[0];
+
+    function trazo(serie) {
+      var d = serie.valores.map(function (v, i) { return (i ? "L" : "M") + x(i) + " " + y(v); }).join(" ");
+      return '<path d="' + d + '" fill="none" style="stroke:' + serie.color +
+        ";stroke-width:" + (serie.protagonista ? 2.25 : 1.4) +
+        ";stroke-linejoin:round;stroke-linecap:round" +
+        (serie.protagonista ? "" : ";opacity:0.75") +
+        (cfg.punteado ? ";stroke-dasharray:6 5" : "") + '"/>';
     }
 
-    var d = cfg.valores.map(function (v, i) { return (i ? "L" : "M") + x(i) + " " + y(v); }).join(" ");
-    s += '<path d="' + d + '" fill="none" style="stroke:' + ESTILO.marca +
-      ';stroke-width:2;stroke-linejoin:round;stroke-linecap:round' +
-      (cfg.punteado ? ";stroke-dasharray:6 5" : "") + '"/>';
+    contexto.forEach(function (s) { svg += trazo(s); });
+    if (hero) {
+      svg += trazo(hero);
+      var ux = x(n - 1), uy = y(hero.valores[n - 1]);
+      svg += '<circle cx="' + ux + '" cy="' + uy + '" r="4.5" style="fill:' + hero.color +
+        ';stroke:var(--color-card);stroke-width:2"/>';
+      svg += '<text x="' + (ux - 8) + '" y="' + (uy - 12) + '" text-anchor="end" style="' + ESTILO.etiqueta + '">' + nf(hero.valores[n - 1]) + "</text>";
+    }
 
-    /* rótulo selectivo: sólo el último punto */
-    var ux = x(n - 1), uy = y(cfg.valores[n - 1]);
-    s += '<circle cx="' + ux + '" cy="' + uy + '" r="4.5" style="fill:' + ESTILO.marca +
-      ';stroke:var(--color-card);stroke-width:2"/>';
-    var anclaX = ux - 8;
-    s += '<text x="' + anclaX + '" y="' + (uy - 12) + '" text-anchor="end" style="' + ESTILO.etiqueta + '">' + nf(cfg.valores[n - 1]) + "</text>";
+    svg += "</svg>";
 
-    return s + "</svg>";
+    var leyenda = '<div class="chart__legend">' + cfg.series.map(function (s) {
+      return '<span><span class="swatch" style="background:' + s.color + '"></span>' + s.nombre + "</span>";
+    }).join("") + "</div>";
+
+    return svg + leyenda;
   }
 
   function marcasAnuales(desde, n, cada) {
@@ -276,24 +289,6 @@
 
   function flechaHoriz() {
     return '<div class="flow__arrow" style="flex:none">' + icono("i-arrow", 22) + "</div>";
-  }
-
-  function diagramaEmbudo() {
-    var etapas = [
-      { v: "92", l: "SKUs" },
-      { v: "27", l: "familias" },
-      { v: "3", l: "clusters" },
-      { v: "3", l: "insumos críticos" }
-    ];
-    var s = '<div class="row" style="flex-wrap:nowrap;gap:0.3rem;align-items:stretch">';
-    etapas.forEach(function (e, i) {
-      if (i) s += flechaHoriz();
-      s += '<div class="card card--flat metric" style="flex:1;min-width:5rem;justify-content:center">' +
-        '<span class="metric__value' + (i === etapas.length - 1 ? " metric__value--accent" : "") +
-        '" style="font-size:1.65rem">' + e.v + "</span>" +
-        '<span class="metric__label">' + e.l + "</span></div>";
-    });
-    return s + "</div>";
   }
 
   function diagramaYolo() {
@@ -338,6 +333,66 @@
     return s + "</div>";
   }
 
+  /* ---------------- Organigrama (Figuras 1 y 2 del informe) ---------------- */
+
+  function organigrama() {
+    var o = D.organigrama;
+    var s = '<div class="orgchart">';
+    s += '<div class="orgchart__node orgchart__node--root">' + o.directorio + "</div>";
+    s += '<div class="orgchart__connector"></div>';
+    s += '<div class="orgchart__node orgchart__node--root">' + o.gerenciaGeneral + "</div>";
+    s += '<div class="orgchart__level"><div class="orgchart__grid">';
+    o.gerencias.forEach(function (g) {
+      var destacada = g === o.supplyChain;
+      s += '<div class="orgchart__node' + (destacada ? " orgchart__node--highlight" : "") + '">' + g + "</div>";
+    });
+    s += "</div></div></div>";
+    return s;
+  }
+
+  function areasSupplyChain() {
+    var o = D.organigrama;
+    return o.areasSupplyChain.map(function (a) {
+      return '<span class="pill">' + a + "</span>";
+    }).join("");
+  }
+
+  /* ---------------- Tabla K-Means (Figura 11 / Tabla 4) ---------------- */
+
+  function tagCluster(c) {
+    var clase = c === "Crítico" ? "tag--alert" : c === "Importante" ? "tag--accent" : "tag--muted";
+    return '<span class="tag ' + clase + '">' + c + "</span>";
+  }
+
+  function tablaKmeans() {
+    var s = '<div class="table-wrap table--compact"><table><thead><tr>' +
+      '<th>Familia</th><th class="num">Score AHP</th><th>Cluster</th></tr></thead><tbody>';
+    D.kmeansTop10.forEach(function (f) {
+      s += '<tr class="' + (f.seleccionado ? "is-selected" : "") + '">' +
+        "<td>" + f.familia + "</td>" +
+        '<td class="num">' + f.score + "</td>" +
+        "<td>" + tagCluster(f.cluster) + "</td></tr>";
+    });
+    s += "</tbody></table></div>";
+    return s;
+  }
+
+  /* ---------------- Tabla de inventario (Tabla 5) ---------------- */
+
+  function tablaInventario() {
+    var s = '<div class="table-wrap"><table><thead><tr>' +
+      "<th>Familia</th><th>Política</th><th class=\"num\">Stock de Seguridad</th>" +
+      '<th class="num">Punto de Pedido / Nivel Objetivo</th><th>U.M.</th></tr></thead><tbody>';
+    D.inventario.forEach(function (i) {
+      s += "<tr><td>" + i.familia + "</td><td>" + i.politica + "</td>" +
+        '<td class="num">' + i.ss + "</td>" +
+        '<td class="num">' + i.puntoPedido + "</td>" +
+        "<td>" + i.unidad + "</td></tr>";
+    });
+    s += "</tbody></table></div>";
+    return s;
+  }
+
   /* ---------------- Montaje ---------------- */
 
   function poner(id, html) {
@@ -366,35 +421,52 @@
     ));
 
     var v = D.ventas;
-    /* Ambos gráficos comparten dominio Y: se leen uno al lado del otro. */
-    var todos = v.historico.slice();
-    v.pronostico.forEach(function (p) { todos.push(p[1], p[2]); });
+    var COLOR_SERIE = {
+      "Cronos-N04": "var(--series-cronos)",
+      "Horizon-M09": "var(--series-horizon)",
+      "Tauro 2-N04": "var(--series-tauro)"
+    };
+
+    function seriesDe(bloque) {
+      return v.articulos.map(function (art) {
+        return {
+          nombre: art,
+          valores: bloque[art],
+          color: COLOR_SERIE[art],
+          protagonista: art === v.protagonista
+        };
+      });
+    }
+
+    /* Los dos gráficos comparten dominio Y: se leen uno al lado del otro. */
+    var todos = [];
+    v.articulos.forEach(function (art) {
+      todos = todos.concat(v.historico[art], v.pronostico[art]);
+    });
     var dominio = [Math.min.apply(null, todos), Math.max.apply(null, todos)];
 
     poner("chart-historico", lineaTemporal({
-      valores: v.historico,
-      banda: null,
+      series: seriesDe(v.historico),
       dominio: dominio,
-      marcasX: marcasAnuales(v.historicoDesde, v.historico.length, 12),
-      alt: "Ventas mensuales históricas del " + v.articulo,
+      marcasX: marcasAnuales(v.historicoDesde, v.historico[v.protagonista].length, 12),
+      alt: "Ventas mensuales históricas por artículo",
       punteado: false
     }));
 
     poner("chart-pronostico", lineaTemporal({
-      valores: v.pronostico.map(function (p) { return p[0]; }),
-      banda: v.pronostico.map(function (p) { return [p[1], p[2]]; }),
+      series: seriesDe(v.pronostico),
       dominio: dominio,
-      marcasX: marcasAnuales(v.pronosticoDesde, v.pronostico.length, 4),
-      alt: "Pronóstico Prophet a 12 meses del " + v.articulo,
+      marcasX: marcasAnuales(v.pronosticoDesde, v.pronostico[v.protagonista].length, 3),
+      alt: "Pronóstico Prophet a 12 meses por artículo",
       punteado: true
-    }) + '<div class="chart__legend">' +
-      '<span><span class="swatch" style="background:var(--color-accent)"></span>Pronóstico (yhat)</span>' +
-      '<span><span class="swatch" style="background:var(--color-accent);opacity:0.22;height:0.55rem"></span>Intervalo de confianza</span>' +
-      "</div>");
+    }));
 
-    poner("chart-embudo", diagramaEmbudo());
     poner("chart-yolo", diagramaYolo());
     poner("chart-mapa", diagramaMapa());
+    poner("chart-organigrama", organigrama());
+    poner("areas-supply-chain", areasSupplyChain());
+    poner("tabla-kmeans", tablaKmeans());
+    poner("tabla-inventario", tablaInventario());
   }
 
   /* ---------------- Arranque ---------------- */
@@ -405,12 +477,6 @@
   try { guardado = localStorage.getItem("tema-065-25"); } catch (err) { /* sin storage */ }
   var inicial = guardado || document.documentElement.getAttribute("data-theme") || "light";
   aplicarTema(inicial === "dark" ? "dark" : "light", false);
-
-  if (!D.ventas.ilustrativo) {
-    Array.prototype.forEach.call(document.querySelectorAll("[data-si-ilustrativo]"), function (el) {
-      el.remove();
-    });
-  }
 
   montarBarras();
   dibujar();

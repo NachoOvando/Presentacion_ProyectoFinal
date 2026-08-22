@@ -36,23 +36,27 @@ nada, pero conviene cerrarlos antes de la defensa.
 | Logo FCEIA-UNR | Slide 1 | Guardar el logo en `assets/logo-fceia.svg` (o `.png`) y reemplazar el `<div class="asset-pendiente asset-pendiente--logo">` por `<img src="assets/logo-fceia.svg" alt="FCEIA - UNR">`. |
 | Texto de agradecimiento | Slide 2 | Reemplazar el `<div class="asset-pendiente">` que sigue al título "Agradecimientos" por el texto. Lo escriben los autores. |
 | Fotos de los 3 insumos críticos | Slide 8 | Guardarlas en `assets/insumos/` y reemplazar cada `<div class="asset-pendiente">` por `<img src="assets/insumos/....jpg" alt="...">`. |
-| Series reales de Prophet | Slide 7 | Ver abajo. |
-| MAE / MAPE de Prophet | Slide 7 | Cargar `metricas` en `data/series.js` (hoy `null`) y agregarlas a la slide si se decide mostrar precisión numérica. |
+| Serie exacta de Prophet (opcional) | Slide 7 | Los valores actuales están leídos de los gráficos del informe (ver "De dónde sale cada dato" abajo), no son el CSV que exporta el notebook. Si quieren esa precisión exacta, reemplazar `ventas.historico` / `ventas.pronostico` en `data/series.js` por la salida real del Anexo A. |
+| MAE / MAPE de Prophet | Slide 7 | No están documentados en el informe ni en el Anexo A. Cargar `ventas.metricas` en `data/series.js` (hoy `null`) y agregarlas a la slide si se decide calcularlas y mostrarlas. |
 
-### Reemplazar los datos ilustrativos de Prophet
+## De dónde sale cada dato
 
-`data/series.js` es el único lugar a tocar. Los valores de `pareto` y `ahp` ya
-son los reales del informe; `ventas.historico` y `ventas.pronostico` son
-ilustrativos.
+Los datos de los gráficos vienen del informe final del Proyecto 065-25 (PDF),
+no están inventados. Según el dato, el método de extracción cambia:
 
-1. Pegar en `ventas.historico` los 36 valores mensuales reales (enero 2023 a
-   diciembre 2025) y en `ventas.pronostico` las 13 ternas
-   `[yhat, yhat_lower, yhat_upper]` (enero 2026 a enero 2027) que devuelve el
-   notebook.
-2. Cambiar `ventas.ilustrativo` a `false`.
+| Dato | Fuente | Método |
+|---|---|---|
+| Pareto (34,4 / 10,2 / 9,1%) | Tabla 1, p.16 | Transcripción exacta |
+| Pesos AHP (0,604 / 0,312 / 0,084) | Tabla 3, p.22 | Transcripción exacta |
+| Ranking K-Means (Top 10, slide 8) | Figura 11 / Tabla 4, p.23 | Transcripción exacta |
+| Política de inventario (slide 9) | Tabla 5, p.25 | Transcripción exacta |
+| Organigrama (slide 3) | Figuras 1 y 2, p.6 | Transcripción exacta |
+| Ventas históricas y pronóstico (slide 7) | Figuras 8 y 9, pp.17-18 | **Digitalización por color de píxel**: el informe no incluye el export numérico del notebook, así que los valores se leyeron de los gráficos publicados calibrando los ejes contra las gridlines detectadas por color. Error estimado ±3-5%. La slide lo aclara con una nota. |
 
-Al hacerlo, el aviso "Datos ilustrativos" de la slide 7 desaparece solo y los
-dos gráficos se redibujan con la escala compartida recalculada.
+`markitdown` no funcionó en el entorno donde se armó este deck (conflicto de
+`cryptography`/`pyo3` a nivel de sistema). Se usó `pymupdf` en su lugar
+(`pip install pymupdf`) para extraer texto y rasterizar las páginas con
+figuras/tablas relevantes.
 
 ## Sistema de diseño
 
@@ -75,7 +79,7 @@ y la demo en vivo se vean como una sola cosa.
 index.html               las 15 slides
 styles.css               tokens de la app + layout + impresión
 app.js                   navegación, tema y render de gráficos y diagramas
-data/series.js           datos de los gráficos (único punto de reemplazo)
+data/series.js           datos reales del informe (ventas, pareto, ahp, kmeansTop10, inventario, organigrama)
 assets/fonts/            Plus Jakarta Sans (latin + latin-ext)
 assets/qr-agente.svg     QR hacia el agente (también está embebido en la slide 14)
 tools/build_artifact.py  genera build/presentacion.html para publicar
