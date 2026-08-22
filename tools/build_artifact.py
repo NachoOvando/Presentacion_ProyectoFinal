@@ -38,7 +38,7 @@ def incrustar_imagenes(cuerpo: str) -> str:
             return m.group(0)  # ejemplo dentro de un comentario, no un asset real
         return 'src="%s"' % data_uri(m.group(1))
 
-    return re.sub(r'src="(assets/[^"]+\.(?:jpg|jpeg|png))"', reemplazo, cuerpo)
+    return re.sub(r'src="(assets/[^"]+\.(?:jpg|jpeg|png|svg))"', reemplazo, cuerpo)
 
 
 def main() -> None:

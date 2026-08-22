@@ -39,9 +39,9 @@
       <span class="pill">Ignacio Ovando</span>
     </div>
     <div class="logo-row">
-      <img class="logo-row__item" src="assets/logos/unr.jpg" alt="Universidad Nacional de Rosario">
-      <img class="logo-row__item" src="assets/logos/fceia.jpg" alt="Facultad de Ciencias Exactas, Ingeniería y Agrimensura">
-      <img class="logo-row__item" src="assets/logos/eii.jpg" alt="Escuela de Ingeniería Industrial">
+      <img class="logo-row__item" src="assets/logos/unr.svg" alt="Universidad Nacional de Rosario">
+      <img class="logo-row__item" src="assets/logos/fceia.svg" alt="Facultad de Ciencias Exactas, Ingeniería y Agrimensura">
+      <img class="logo-row__item" src="assets/logos/eii.svg" alt="Escuela de Ingeniería Industrial">
     </div>
   </div>
 </section>
@@ -217,7 +217,7 @@
 
 <!-- ====================== 8. K-Means + AHP ====================== -->
 <section class="slide" id="slide-8" data-seccion="planificacion" data-titulo="Clasificación K-Means e insumos críticos">
-  <div class="slide__inner" style="gap:0.85rem">
+  <div class="slide__inner" style="gap:0.65rem">
     <p class="kicker">Planificación</p>
     <h2>Qué insumos son realmente críticos</h2>
     <div class="grid grid--split">
@@ -226,19 +226,26 @@
         <div class="chart" id="chart-ahp"></div>
         <p class="metric__label">Pesos validados por encuesta (n = 10, CR aprox. 0). El <b>alcance productivo</b> &mdash;cuántos modelos dependen del insumo&mdash; domina la decisión.</p>
       </div>
-      <div class="card stack" style="padding:0.75rem;gap:0.4rem">
+      <div class="card stack" style="padding:0.75rem;gap:0.3rem">
         <h3>92 SKUs → 27 familias de compra → Top 10 por Score AHP</h3>
         <div id="tabla-kmeans"></div>
-        <p class="metric__label">K-Means separa las familias en tres clusters de criticidad. Fila resaltada: los 3 insumos seleccionados.</p>
+        <p class="metric__label" style="margin:0">Fila resaltada: los 3 insumos seleccionados.</p>
       </div>
     </div>
     <p class="kicker" style="margin:0">Los tres insumos críticos seleccionados</p>
     <div class="grid grid--3">
-      <!-- PENDIENTE (autores): reemplazar cada .asset-pendiente por
-           <img src="assets/insumos/....jpg" alt="..."> cuando lleguen las fotos. -->
-      <div class="asset-pendiente"><b>Conjunto Sistema PU</b><span>Foto pendiente: solicitar a los autores.</span></div>
-      <div class="asset-pendiente"><b>Puntera de Acero 59 Normal</b><span>Foto pendiente: solicitar a los autores.</span></div>
-      <div class="asset-pendiente"><b>Cajas de Empaque</b><span>Foto pendiente: solicitar a los autores.</span></div>
+      <figure class="insumo-foto">
+        <img src="assets/insumos/conjunto-sistema-pu.jpg" alt="Tambores del Conjunto Sistema PU apilados en el depósito">
+        <figcaption>Conjunto Sistema PU</figcaption>
+      </figure>
+      <figure class="insumo-foto">
+        <img src="assets/insumos/puntera-acero.jpg" alt="Cajas de Puntera de Acero 59 Normal en la estantería">
+        <figcaption>Puntera de Acero 59 Normal</figcaption>
+      </figure>
+      <figure class="insumo-foto">
+        <img src="assets/insumos/caja-empaque.jpg" alt="Fardos de Cajas de Empaque en pallets">
+        <figcaption>Cajas de Empaque</figcaption>
+      </figure>
     </div>
   </div>
 </section>
