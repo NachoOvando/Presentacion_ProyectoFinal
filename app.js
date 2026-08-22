@@ -79,6 +79,7 @@
     document.title = slides[i].getAttribute("data-titulo") + " — Proyecto 065-25";
     if (history.replaceState) history.replaceState(null, "", "#slide-" + (i + 1));
     window.scrollTo(0, 0);
+    if (slides[i].querySelector("#chart-prophet-combinado")) reiniciarAnimacionPronostico();
   }
 
   function desdeHash() {
@@ -203,18 +204,23 @@
     return ticks;
   }
 
-  /* Serie temporal mensual, multi-serie. Eje Y con base no nula, ticks
-     rotulados y una sola serie "protagonista" con marcador y valor
-     rotulados en la punta; el resto queda de contexto (más fina, sin
-     marcador) para que no compitan visualmente con Cronos-N04. */
-  function lineaTemporal(cfg) {
-    var W = 620, H = 260;
-    var ml = 52, mr = 16, mt = 14, mb = 30;
+  /* Histórico + pronóstico de Prophet en un solo gráfico: tramo histórico
+     sólido (dato conocido) y tramo de pronóstico punteado (proyección),
+     separados por una línea vertical. El tramo de pronóstico queda
+     recortado por un <clipPath> cuyo ancho anima de 0 al total cuando se
+     entra a la slide, para que se vea como una evolución hacia adelante
+     del histórico (ver reiniciarAnimacionPronostico). Una sola serie
+     "protagonista" lleva marcador y valor final rotulados. */
+  function graficoProphetCombinado(cfg) {
+    var W = 900, H = 225;
+    var ml = 52, mr = 16, mt = 20, mb = 28;
     var pw = W - ml - mr, ph = H - mt - mb;
-    var n = cfg.series[0].valores.length;
+    var nHist = cfg.series[0].historico.length;
+    var nFcst = cfg.series[0].pronostico.length;
+    var n = nHist + nFcst;
 
     var todos = [];
-    cfg.series.forEach(function (s) { todos = todos.concat(s.valores); });
+    cfg.series.forEach(function (s) { todos = todos.concat(s.historico, s.pronostico); });
     var lo = cfg.dominio ? cfg.dominio[0] : Math.min.apply(null, todos);
     var hi = cfg.dominio ? cfg.dominio[1] : Math.max.apply(null, todos);
     var paso = 1000;
@@ -222,10 +228,15 @@
     var yMax = Math.ceil((hi + paso * 0.35) / paso) * paso;
     while ((yMax - yMin) / paso > 6) paso *= 2;
 
-    var x = function (i) { return ml + (n === 1 ? pw / 2 : (pw * i) / (n - 1)); };
+    var x = function (i) { return ml + (pw * i) / (n - 1); };
     var y = function (v) { return mt + ph - ((v - yMin) / (yMax - yMin)) * ph; };
+    var xDiv = (x(nHist - 1) + x(nHist)) / 2;
+    var anchoPronostico = W - mr - xDiv + 6;
 
-    var svg = '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="' + cfg.alt + '">';
+    var svg = '<svg id="chart-prophet-combinado" viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="' + cfg.alt + '">';
+
+    svg += "<defs><clipPath id=\"clip-pronostico\"><rect class=\"forecast-reveal\" data-full-width=\"" +
+      anchoPronostico + '" x="' + xDiv + '" y="' + mt + '" width="0" height="' + ph + '"/></clipPath></defs>';
 
     ejesY(yMin, yMax, paso).forEach(function (v) {
       svg += '<line x1="' + ml + '" x2="' + (W - mr) + '" y1="' + y(v) + '" y2="' + y(v) + '" style="' + ESTILO.grid + '"/>';
@@ -236,26 +247,44 @@
       svg += '<text x="' + x(m.i) + '" y="' + (H - 10) + '" text-anchor="middle" style="' + ESTILO.ejeTexto + '">' + m.texto + "</text>";
     });
 
-    /* series de contexto primero, para que la protagonista quede arriba */
+    /* separador histórico / pronóstico */
+    svg += '<line x1="' + xDiv + '" x2="' + xDiv + '" y1="' + mt + '" y2="' + (mt + ph) + '" style="stroke:var(--color-muted-foreground);stroke-width:1;stroke-dasharray:3 3;opacity:0.6"/>';
+    svg += '<text x="' + (xDiv + 6) + '" y="' + (mt + 2) + '" style="' + ESTILO.ejeTexto + '">Pronóstico</text>';
+
     var contexto = cfg.series.filter(function (s) { return !s.protagonista; });
     var hero = cfg.series.filter(function (s) { return s.protagonista; })[0];
 
-    function trazo(serie) {
-      var d = serie.valores.map(function (v, i) { return (i ? "L" : "M") + x(i) + " " + y(v); }).join(" ");
-      return '<path d="' + d + '" fill="none" style="stroke:' + serie.color +
-        ";stroke-width:" + (serie.protagonista ? 2.25 : 1.4) +
-        ";stroke-linejoin:round;stroke-linecap:round" +
-        (serie.protagonista ? "" : ";opacity:0.75") +
-        (cfg.punteado ? ";stroke-dasharray:6 5" : "") + '"/>';
+    function trazoHistorico(serie) {
+      var d = serie.historico.map(function (v, i) { return (i ? "L" : "M") + x(i) + " " + y(v); }).join(" ");
+      return '<path d="' + d + '" fill="none" style="' + estiloTrazo(serie) + '"/>';
     }
 
-    contexto.forEach(function (s) { svg += trazo(s); });
+    function trazoPronostico(serie) {
+      var puntos = [serie.historico[nHist - 1]].concat(serie.pronostico);
+      var d = puntos.map(function (v, i) { return (i ? "L" : "M") + x(nHist - 1 + i) + " " + y(v); }).join(" ");
+      return '<path d="' + d + '" fill="none" style="' + estiloTrazo(serie) + ';stroke-dasharray:5 4"/>';
+    }
+
+    function estiloTrazo(serie) {
+      return "stroke:" + serie.color +
+        ";stroke-width:" + (serie.protagonista ? 2.25 : 1.4) +
+        ";stroke-linejoin:round;stroke-linecap:round" +
+        (serie.protagonista ? "" : ";opacity:0.75");
+    }
+
+    contexto.forEach(function (s) { svg += trazoHistorico(s); });
+    if (hero) svg += trazoHistorico(hero);
+
+    svg += '<g clip-path="url(#clip-pronostico)">';
+    contexto.forEach(function (s) { svg += trazoPronostico(s); });
+    if (hero) svg += trazoPronostico(hero);
+    svg += "</g>";
+
     if (hero) {
-      svg += trazo(hero);
-      var ux = x(n - 1), uy = y(hero.valores[n - 1]);
-      svg += '<circle cx="' + ux + '" cy="' + uy + '" r="4.5" style="fill:' + hero.color +
-        ';stroke:var(--color-card);stroke-width:2"/>';
-      svg += '<text x="' + (ux - 8) + '" y="' + (uy - 12) + '" text-anchor="end" style="' + ESTILO.etiqueta + '">' + nf(hero.valores[n - 1]) + "</text>";
+      var ux = x(n - 1), uy = y(hero.pronostico[nFcst - 1]);
+      svg += '<g class="forecast-endpoint" style="opacity:0">' +
+        '<circle cx="' + ux + '" cy="' + uy + '" r="4.5" style="fill:' + hero.color + ';stroke:var(--color-card);stroke-width:2"/>' +
+        '<text x="' + (ux - 8) + '" y="' + (uy - 12) + '" text-anchor="end" style="' + ESTILO.etiqueta + '">' + nf(hero.pronostico[nFcst - 1]) + "</text></g>";
     }
 
     svg += "</svg>";
@@ -265,6 +294,43 @@
     }).join("") + "</div>";
 
     return svg + leyenda;
+  }
+
+  /* Reproduce (o repone) la animación del tramo de pronóstico: el <rect>
+     que recorta el tramo punteado crece de 0 al ancho total, y el
+     marcador final aparece al terminar. Se llama cada vez que se entra a
+     la slide del gráfico para que la "evolución" se vea en cada pasada. */
+  function reiniciarAnimacionPronostico() {
+    var svg = document.getElementById("chart-prophet-combinado");
+    if (!svg) return;
+    var rect = svg.querySelector(".forecast-reveal");
+    var endpoint = svg.querySelector(".forecast-endpoint");
+    if (!rect) return;
+    var full = rect.getAttribute("data-full-width");
+    var reducido = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (reducido) {
+      rect.setAttribute("width", full);
+      if (endpoint) endpoint.style.opacity = "1";
+      return;
+    }
+
+    rect.style.transition = "none";
+    rect.setAttribute("width", "0");
+    if (endpoint) {
+      endpoint.style.transition = "none";
+      endpoint.style.opacity = "0";
+    }
+    void rect.getBoundingClientRect(); /* fuerza reflow antes de animar */
+
+    requestAnimationFrame(function () {
+      rect.style.transition = "width 1700ms cubic-bezier(.22,.61,.36,1)";
+      rect.setAttribute("width", full);
+      if (endpoint) {
+        endpoint.style.transition = "opacity 450ms ease 1500ms";
+        endpoint.style.opacity = "1";
+      }
+    });
   }
 
   function marcasAnuales(desde, n, cada) {
@@ -427,38 +493,27 @@
       "Tauro 2-N04": "var(--series-tauro)"
     };
 
-    function seriesDe(bloque) {
-      return v.articulos.map(function (art) {
-        return {
-          nombre: art,
-          valores: bloque[art],
-          color: COLOR_SERIE[art],
-          protagonista: art === v.protagonista
-        };
-      });
-    }
-
-    /* Los dos gráficos comparten dominio Y: se leen uno al lado del otro. */
     var todos = [];
     v.articulos.forEach(function (art) {
       todos = todos.concat(v.historico[art], v.pronostico[art]);
     });
     var dominio = [Math.min.apply(null, todos), Math.max.apply(null, todos)];
+    var nTotal = v.historico[v.protagonista].length + v.pronostico[v.protagonista].length;
 
-    poner("chart-historico", lineaTemporal({
-      series: seriesDe(v.historico),
+    poner("chart-prophet", graficoProphetCombinado({
+      series: v.articulos.map(function (art) {
+        return {
+          nombre: art,
+          historico: v.historico[art],
+          pronostico: v.pronostico[art],
+          color: COLOR_SERIE[art],
+          protagonista: art === v.protagonista
+        };
+      }),
       dominio: dominio,
-      marcasX: marcasAnuales(v.historicoDesde, v.historico[v.protagonista].length, 12),
-      alt: "Ventas mensuales históricas por artículo",
-      punteado: false
-    }));
-
-    poner("chart-pronostico", lineaTemporal({
-      series: seriesDe(v.pronostico),
-      dominio: dominio,
-      marcasX: marcasAnuales(v.pronosticoDesde, v.pronostico[v.protagonista].length, 3),
-      alt: "Pronóstico Prophet a 12 meses por artículo",
-      punteado: true
+      historicoDesde: v.historicoDesde,
+      marcasX: marcasAnuales(v.historicoDesde, nTotal, 6),
+      alt: "Ventas mensuales por artículo: histórico enero 2023 a diciembre 2025 y pronóstico Prophet enero a diciembre 2026"
     }));
 
     poner("chart-yolo", diagramaYolo());

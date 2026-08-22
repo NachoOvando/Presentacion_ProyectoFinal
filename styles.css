@@ -514,14 +514,28 @@ tr.is-total td {
   line-height: 1.35;
 }
 
-.asset-pendiente--logo {
-  min-height: 5.5rem;
-  width: min(15rem, 100%);
-}
-
 .asset-pendiente b {
   color: var(--color-secondary);
   font-weight: 600;
+}
+
+.logo-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.25rem;
+  background: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: 0.85rem 1.25rem;
+  width: fit-content;
+  box-shadow: var(--shadow-card);
+}
+
+.logo-row__item {
+  height: 2.75rem;
+  width: auto;
+  display: block;
 }
 
 .nota-pendiente {

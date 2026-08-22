@@ -13,14 +13,32 @@ import re
 RAIZ = pathlib.Path(__file__).resolve().parent.parent
 SALIDA = RAIZ / "build" / "presentacion.html"
 
+MIME = {".woff2": "font/woff2", ".jpg": "image/jpeg", ".jpeg": "image/jpeg",
+        ".png": "image/png", ".svg": "image/svg+xml"}
+
+
+def data_uri(ruta_relativa: str) -> str:
+    ruta = RAIZ / ruta_relativa
+    ext = ruta.suffix.lower()
+    datos = base64.b64encode(ruta.read_bytes()).decode()
+    return "data:%s;base64,%s" % (MIME[ext], datos)
+
 
 def incrustar_fuentes(css: str) -> str:
     def reemplazo(m):
-        ruta = RAIZ / m.group(1)
-        datos = base64.b64encode(ruta.read_bytes()).decode()
-        return 'url("data:font/woff2;base64,%s")' % datos
+        return 'url("%s")' % data_uri(m.group(1))
 
     return re.sub(r'url\("([^"]+\.woff2)"\)', reemplazo, css)
+
+
+def incrustar_imagenes(cuerpo: str) -> str:
+    def reemplazo(m):
+        ruta = RAIZ / m.group(1)
+        if not ruta.exists():
+            return m.group(0)  # ejemplo dentro de un comentario, no un asset real
+        return 'src="%s"' % data_uri(m.group(1))
+
+    return re.sub(r'src="(assets/[^"]+\.(?:jpg|jpeg|png))"', reemplazo, cuerpo)
 
 
 def main() -> None:
@@ -31,6 +49,7 @@ def main() -> None:
 
     cuerpo = html.split("<body>", 1)[1].split("</body>", 1)[0]
     cuerpo = re.sub(r'\s*<script src="[^"]+"></script>', "", cuerpo)
+    cuerpo = incrustar_imagenes(cuerpo)
 
     titulo = re.search(r"<title>(.*?)</title>", html, re.S).group(1)
 

@@ -33,11 +33,14 @@ nada, pero conviene cerrarlos antes de la defensa.
 
 | Pendiente | Dónde | Cómo se completa |
 |---|---|---|
-| Logo FCEIA-UNR | Slide 1 | Guardar el logo en `assets/logo-fceia.svg` (o `.png`) y reemplazar el `<div class="asset-pendiente asset-pendiente--logo">` por `<img src="assets/logo-fceia.svg" alt="FCEIA - UNR">`. |
 | Texto de agradecimiento | Slide 2 | Reemplazar el `<div class="asset-pendiente">` que sigue al título "Agradecimientos" por el texto. Lo escriben los autores. |
-| Fotos de los 3 insumos críticos | Slide 8 | Guardarlas en `assets/insumos/` y reemplazar cada `<div class="asset-pendiente">` por `<img src="assets/insumos/....jpg" alt="...">`. |
+| Fotos de los 3 insumos críticos | Slide 8 | No están en el PDF del informe (se revisaron todas las imágenes embebidas: solo hay diagramas y los 3 logos institucionales, ya incorporados). Guardarlas en `assets/insumos/` y reemplazar cada `<div class="asset-pendiente">` por `<img src="assets/insumos/....jpg" alt="...">`. |
 | Serie exacta de Prophet (opcional) | Slide 7 | Los valores actuales están leídos de los gráficos del informe (ver "De dónde sale cada dato" abajo), no son el CSV que exporta el notebook. Si quieren esa precisión exacta, reemplazar `ventas.historico` / `ventas.pronostico` en `data/series.js` por la salida real del Anexo A. |
 | MAE / MAPE de Prophet | Slide 7 | No están documentados en el informe ni en el Anexo A. Cargar `ventas.metricas` en `data/series.js` (hoy `null`) y agregarlas a la slide si se decide calcularlas y mostrarlas. |
+
+El logo institucional (slide 1) ya está resuelto: son los 3 logos reales
+(UNR, FCEIA, Escuela de Ingeniería Industrial) extraídos de la portada del
+PDF, en `assets/logos/`.
 
 ## De dónde sale cada dato
 
@@ -52,6 +55,14 @@ no están inventados. Según el dato, el método de extracción cambia:
 | Política de inventario (slide 9) | Tabla 5, p.25 | Transcripción exacta |
 | Organigrama (slide 3) | Figuras 1 y 2, p.6 | Transcripción exacta |
 | Ventas históricas y pronóstico (slide 7) | Figuras 8 y 9, pp.17-18 | **Digitalización por color de píxel**: el informe no incluye el export numérico del notebook, así que los valores se leyeron de los gráficos publicados calibrando los ejes contra las gridlines detectadas por color. Error estimado ±3-5%. La slide lo aclara con una nota. |
+| Logos institucionales (slide 1) | Portada, p.1 | Imágenes embebidas extraídas del PDF (UNR, FCEIA, Escuela de Ingeniería Industrial) |
+
+El gráfico de la slide 7 muestra histórico y pronóstico **en un solo eje**:
+tramo sólido para el dato conocido, tramo punteado para la proyección a
+partir de una línea divisoria. El tramo punteado se dibuja con una animación
+(un `<clipPath>` que crece de 0 al ancho total) cada vez que se entra a la
+slide, para que se vea como una evolución hacia adelante del histórico; se
+desactiva sola si el sistema tiene activado "reducir movimiento".
 
 `markitdown` no funcionó en el entorno donde se armó este deck (conflicto de
 `cryptography`/`pyo3` a nivel de sistema). Se usó `pymupdf` en su lugar
@@ -81,6 +92,7 @@ styles.css               tokens de la app + layout + impresión
 app.js                   navegación, tema y render de gráficos y diagramas
 data/series.js           datos reales del informe (ventas, pareto, ahp, kmeansTop10, inventario, organigrama)
 assets/fonts/            Plus Jakarta Sans (latin + latin-ext)
+assets/logos/            logos institucionales reales (UNR, FCEIA, Escuela de Ingeniería Industrial)
 assets/qr-agente.svg     QR hacia el agente (también está embebido en la slide 14)
 tools/build_artifact.py  genera build/presentacion.html para publicar
 ```

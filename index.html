@@ -38,9 +38,10 @@
       <span class="pill">Jerónimo Guaita</span>
       <span class="pill">Ignacio Ovando</span>
     </div>
-    <div class="asset-pendiente asset-pendiente--logo">
-      <b>Logo FCEIA &middot; UNR</b>
-      <span>Asset pendiente: reemplazar por el logo institucional en alta resolución (ver README).</span>
+    <div class="logo-row">
+      <img class="logo-row__item" src="assets/logos/unr.jpg" alt="Universidad Nacional de Rosario">
+      <img class="logo-row__item" src="assets/logos/fceia.jpg" alt="Facultad de Ciencias Exactas, Ingeniería y Agrimensura">
+      <img class="logo-row__item" src="assets/logos/eii.jpg" alt="Escuela de Ingeniería Industrial">
     </div>
   </div>
 </section>
@@ -196,25 +197,18 @@
 
 <!-- ====================== 7. Prophet ====================== -->
 <section class="slide" id="slide-7" data-seccion="planificacion" data-titulo="Comportamiento histórico y pronóstico">
-  <div class="slide__inner">
+  <div class="slide__inner" style="gap:0.85rem">
     <p class="kicker">Planificación</p>
     <div class="row" style="justify-content:space-between">
       <h2>Del histórico al pronóstico con Prophet</h2>
       <span class="nota-pendiente">Valores leídos de los gráficos del informe (Fig. 8-9), no el export exacto del notebook</span>
     </div>
-    <div class="grid grid--2">
-      <div class="card stack">
-        <h3>Ventas mensuales, enero 2023 &ndash; diciembre 2025</h3>
-        <div class="chart" id="chart-historico"></div>
-        <p class="metric__label">Los tres artículos del Pareto. El <b>Cronos-N04</b> muestra una tendencia creciente, con estacionalidad marcada.</p>
-      </div>
-      <div class="card stack">
-        <h3>Pronóstico a 12 meses, enero &ndash; diciembre 2026</h3>
-        <div class="chart" id="chart-pronostico"></div>
-        <p class="metric__label">Prophet (Meta) descompone la serie en tendencia y estacionalidad y proyecta el período siguiente.</p>
-      </div>
+    <div class="card stack" style="padding:0.85rem;gap:0.4rem">
+      <h3>Ventas mensuales, enero 2023 &ndash; diciembre 2026</h3>
+      <div class="chart" id="chart-prophet"></div>
+      <p class="metric__label">Los tres artículos del Pareto. El tramo sólido es el histórico; el punteado, a partir de la línea divisoria, es el pronóstico que agrega Prophet (Meta) al descomponer la serie en tendencia y estacionalidad. El <b>Cronos-N04</b> muestra una tendencia creciente, con estacionalidad marcada.</p>
     </div>
-    <div class="card card--flat row" style="gap:0.9rem">
+    <div class="card card--flat row" style="gap:0.9rem;padding:0.7rem">
       <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" style="color:var(--color-accent)"><use href="#i-box"/></svg>
       <p class="metric__label" style="flex:1;min-width:14rem">El pronóstico cruzado con la <b>BOM</b> (lista de materiales) traduce pares proyectados en insumos necesarios para fabricarlos. Esa proyección de insumos es la entrada del paso siguiente.</p>
     </div>
